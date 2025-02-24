@@ -3,7 +3,7 @@ set SPRING_APPLICATION_NAME =
 
 mnvw package
 
-WINDOWS Poweshell-----------------------------------------------------
+WINDOWS Powershell-----------------------------------------------------
 $env:DATASOURCE_URL="jdbc:mysql://localhost:3306/flightdb"
 $env:DATASOURCE_USER="root"
 $env:DATASOURCE_PASSWORD="root"
