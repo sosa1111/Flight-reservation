@@ -6,8 +6,8 @@
 git clone https://github.com/shubhamkalsait/Flight-reservation.git
 ```
 
-3. Install Mysql Server and create database
-'''shell
+2. Install Mysql Server and create database
+```shell
 apt update -y
 apt install mysql-server -y
 mysql_secure_installation
@@ -17,10 +17,10 @@ mysql -uroot -p
 >> flush privileges;
 >> create flightdb;
 >> exit
-'''
+```
 
 3. Deploy Backend
-'''shell
+```shell
 cd Flight-reservation
 cd FlightReservationSystem
 apt install openjdk-17-jdk -y
@@ -31,10 +31,10 @@ export DATASOURCE_PASSWORD="Redhat"
 export FRONTEND_URL="http://localhost:80"
 mvn clean package
 java -jar target/flight*.jar
-'''
+```
 
-5. Deploy Frontend (open new tab)
-'''shell
+4. Deploy Frontend (open new tab)
+```shell
 cd Flight-reservation
 cd frontend
 apt install nodejs npm -y
@@ -44,5 +44,5 @@ npm run build
 apt install apache2 -y
 cp dist/* /var/www/html/
 systemctl start apache2
-'''
+```
 
