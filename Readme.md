@@ -2,7 +2,7 @@
 ---
 ## Steps to deploy Application
 1. Clone this repository
-shell```
+```shell
 git clone https://github.com/shubhamkalsait/Flight-reservation.git
 ```
 
