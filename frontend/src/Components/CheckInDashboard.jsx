@@ -18,7 +18,7 @@ export default function CheckInDashboard() {
         e.preventDefault();
         try {
             
-            const response = await axios.post(`${process.env.REACT_APP_CHECKIN_URL}/api/checkin/${bookingId}`,{}, {
+            const response = await axios.post(`${import.meta.env.VITE_API_CHECKIN_URL}/api/checkin/${bookingId}`,{}, {
                 params: {
                     numberOfBags: numberOfBags,
                 },
