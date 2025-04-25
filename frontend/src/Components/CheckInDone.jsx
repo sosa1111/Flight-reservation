@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { signOut } from "../Redux-config/UserSlice";
 
 export default function CheckInDone(){
     return <>
@@ -9,7 +10,8 @@ export default function CheckInDone(){
             </h1>
             </div>
             <center>
-            <Link to={'/'} ><button className="btn btn-outline-primary">Home</button></Link>
+            <button onClick={() => dispatch(signOut())}  className="btn btn-outline-primary">Home</button>
+            {/* <Link to={'/'} ><button className="btn btn-outline-primary">Home</button></Link> */}
             </center>
         </div>
     </>

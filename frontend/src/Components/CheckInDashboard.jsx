@@ -28,7 +28,7 @@ export default function CheckInDashboard() {
 
             }); 
             toast.success('CheckIn successfull');
-            dispatch(signOut());
+            // dispatch(signOut());
             navigate('/checkin-done');
         }
         catch (err) {
@@ -48,7 +48,7 @@ export default function CheckInDashboard() {
                 </div>
                 <div className='form-group mt-3 mb-3'>
                 <label className="form-label">Number of bags</label>
-                    <input type="text" placeholder="1" defaultValue={1} className='form-control'  onChange={(e) => setNumberOfBags(e.target.value)} required />
+                    <input type="text" placeholder="e.g. 2" className='form-control'  onChange={(e) => setNumberOfBags(e.target.value)} required />
                 </div>
                 <button type="submit" className="btn btn-outline-primary">Submit</button>
             </form>
