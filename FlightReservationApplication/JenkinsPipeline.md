@@ -246,6 +246,9 @@ The pipeline consists of the following stages:
 - copy kubeconfig to jenkins user `cp -rf ~/.kube /var/lib/jenkin/`
 - allow jenkins to use kubeconfig `chown jenkins -R /var/lib/jenkins/.kube`
 
+### Create and update DB cred
+- Create DB with name flightdb
+- update DB credentials in application.properties
 
 ## Post-Build Actions
 
