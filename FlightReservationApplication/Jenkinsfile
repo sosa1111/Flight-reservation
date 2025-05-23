@@ -41,7 +41,7 @@ pipeline {
                 withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar-cred') {
                     sh '''
                         cd FlightReservationApplication
-                        ${MAVEN_HOME}/bin/mvn sonar:sonar 
+                        ${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=flight-reservation-app
                     '''
                 }
             }
