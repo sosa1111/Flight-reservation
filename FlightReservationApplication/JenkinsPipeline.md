@@ -89,6 +89,7 @@ kubectl version --client
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
+aws configure
 ```
 
 ## Install maven and git
@@ -146,7 +147,7 @@ apt install maven -y
 ### 2. Configure Tools
 1. Go to Manage Jenkins > Global Tool Configuration
 2. Configure the following tools:
-   - JDK 17
+   - JDK17
    - Maven
    - Docker
    - kubectl
@@ -154,7 +155,7 @@ apt install maven -y
 ### 3. Configure Credentials
 1. Go to Manage Jenkins > Credentials > System
 2. Add the following credentials:
-   - Docker Registry credentials (ID: 'docker-credentials')
+   - Docker Registry credentials (ID: 'docker-cred')
    - SonarQube token (ID: 'sonar-cred')
    - Git credentials (if using private repository)
 
@@ -243,7 +244,7 @@ The pipeline consists of the following stages:
 - update ~/.kube/config to authenticate with cluster
 `aws eks update-kubeconfig --name cbz-cluster-dev --region eu-west-2`
 - copy kubeconfig to jenkins user `cp -rf ~/.kube /var/lib/jenkin/`
-- allow jenkins to use kubeconfig `chown jenkins -R /var/lib/jenkin/.kube`
+- allow jenkins to use kubeconfig `chown jenkins -R /var/lib/jenkins/.kube`
 
 
 ## Post-Build Actions
