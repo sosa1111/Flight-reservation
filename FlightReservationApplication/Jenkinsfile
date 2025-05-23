@@ -79,8 +79,7 @@ pipeline {
                     // Assuming you're using Kubernetes for deployment
                     sh '''
                         kubectl set image deployment/flight-reservation-app \
-                        flight-reservation-app=${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} \
-                        --namespace=flight-reservation
+                        flight-reservation-app=${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} 
                     '''
                 }
             }
