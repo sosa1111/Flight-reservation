@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_IMAGE_NAME = 'flight-reservation-app'
+        DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
+        MAVEN_HOME = tool 'Maven'
+        JAVA_HOME = tool 'JDK17'
+        SONAR_HOST_URL = 'http://35.179.130.190:9000'
+        SONAR_TOKEN = credentials('sonar-cred')
+    }
+    
+    stages {
+        stage('PULL') {
+            steps {
+                git branch: 'main', url: 'https://github.com/shubhamkalsait/Flight-reservation.git'
+            }
+        }
+        
+        stage('BUILD') {
+            steps {
+                sh '''
+                    ${MAVEN_HOME}/bin/mvn clean package -DskipTests
+                '''
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                sh '''
+                    ${MAVEN_HOME}/bin/mvn test
+                '''
+            }
+        }
+        
+        stage('QA') {
+            steps {
+                withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar-cred') {
+                    sh '''
+                        ${MAVEN_HOME}/bin/mvn sonar:sonar 
+                    '''
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('DOCKER BUILD') {
+            steps {
+                script {
+                    docker.build("${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
+                }
+            }
+        }
+        stage('DOCKER PUSH') {
+            steps {
+                script {
+                    docker.withRegistry('https://${DOCKER_REGISTRY}', 'docker-credentials') {
+                        docker.image("${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push()
+                    }
+                }
+            }
+        }
+        stage('DEPLOY') {
+            steps {
+                script {
+                    // Assuming you're using Kubernetes for deployment
+                    sh '''
+                        kubectl set image deployment/flight-reservation-app \
+                        flight-reservation-app=${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} \
+                        --namespace=flight-reservation
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
+            cleanWs()
+        }
+    }
+} 

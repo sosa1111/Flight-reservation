@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+    
+    environment {
+        AWS_CREDENTIALS = credentials('aws-credentials')
+        S3_BUCKET = 'your-s3-bucket-name'
+        AWS_REGION = 'your-aws-region'
+        NODE_VERSION = '18.x'
+    }
+    
+    stages {
+        stage('PULL') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    nvm install ${NODE_VERSION}
+                    nvm use ${NODE_VERSION}
+                    npm install
+                '''
+            }
+        }
+        
+        stage('Lint') {
+            steps {
+                sh '''
+                    nvm use ${NODE_VERSION}
+                    npm run lint
+                '''
+            }
+        }
+        
+        stage('Unit Tests') {
+            steps {
+                sh '''
+                    nvm use ${NODE_VERSION}
+                    npm test
+                '''
+            }
+            post {
+                always {
+                    junit 'junit.xml'
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh '''
+                    nvm use ${NODE_VERSION}
+                    npm run build
+                '''
+            }
+        }
+        
+        stage('S3 Deploy') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: '${AWS_REGION}') {
+                    sh '''
+                        aws s3 sync dist/ s3://${S3_BUCKET} --delete
+                        aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Frontend deployment completed successfully!'
+        }
+        failure {
+            echo 'Frontend deployment failed!'
+        }
+        always {
+            cleanWs()
+        }
+    }
+} 
