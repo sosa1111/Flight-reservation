@@ -2,34 +2,24 @@ pipeline {
     agent any
     
     environment {
-        AWS_CREDENTIALS = credentials('aws-credentials')
-        S3_BUCKET = 'your-s3-bucket-name'
-        AWS_REGION = 'your-aws-region'
-        NODE_VERSION = '18.x'
+        AWS_CREDENTIALS = credentials('aws-cred')
+        S3_BUCKET = 'cbz-frontend-dev-buxxx'
+        AWS_REGION = 'eu-west-2'
+    #    NODE_VERSION = '18.x'
     }
     
     stages {
         stage('PULL') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/shubhamkalsait/Flight-reservation.git'
             }
         }
         
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    nvm install ${NODE_VERSION}
-                    nvm use ${NODE_VERSION}
+                    cd frontend
                     npm install
-                '''
-            }
-        }
-        
-        stage('Lint') {
-            steps {
-                sh '''
-                    nvm use ${NODE_VERSION}
-                    npm run lint
                 '''
             }
         }
@@ -37,21 +27,15 @@ pipeline {
         stage('Unit Tests') {
             steps {
                 sh '''
-                    nvm use ${NODE_VERSION}
+                    cd frontend
                     npm test
                 '''
             }
-            post {
-                always {
-                    junit 'junit.xml'
-                }
-            }
-        }
         
         stage('Build') {
             steps {
                 sh '''
-                    nvm use ${NODE_VERSION}
+                    cd frontend
                     npm run build
                 '''
             }
@@ -59,10 +43,10 @@ pipeline {
         
         stage('S3 Deploy') {
             steps {
-                withAWS(credentials: 'aws-credentials', region: '${AWS_REGION}') {
+                withAWS(credentials: 'aws-cred', region: '${AWS_REGION}') {
                     sh '''
                         aws s3 sync dist/ s3://${S3_BUCKET} --delete
-                        aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+                       # aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
                     '''
                 }
             }

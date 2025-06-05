@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: flight-reservation-app
-        image: ${DOCKER_REGISTRY}/flight-reservation-app:${DOCKER_IMAGE_TAG}
+        image: shubhamkalsait1/flight-reservation-app:15
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -28,22 +28,3 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "500m"
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "prod"
-        - name: JAVA_OPTS
-          value: "-Xms512m -Xmx1024m"
-        livenessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 5
-      imagePullSecrets:
-      - name: docker-credentials 
