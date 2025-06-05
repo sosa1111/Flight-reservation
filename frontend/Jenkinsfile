@@ -35,7 +35,7 @@ pipeline {
         
         stage('S3 Deploy') {
             steps {
-                withAWS(credentials: 'aws-cred', region: '${AWS_REGION}') {
+                withAWS(credentials: 'aws-cred', region: 'eu-west-2') {
                     sh '''
                         aws s3 sync dist/ s3://${S3_BUCKET} --delete
                        # aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
