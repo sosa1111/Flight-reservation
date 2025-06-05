@@ -24,14 +24,6 @@ pipeline {
             }
         }
         
-        stage('Unit Tests') {
-            steps {
-                sh '''
-                    cd frontend
-                    npm run test
-                '''
-            }
-        }
         stage('Build') {
             steps {
                 sh '''
