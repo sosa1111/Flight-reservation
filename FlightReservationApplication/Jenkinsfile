@@ -82,7 +82,7 @@ pipeline {
                     
                         #kubectl set image deployment/flight-reservation-app \
                         #flight-reservation-app=${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} 
-                    
+                        cd FlightReservationApplication
                         kubectl apply -f k8s/
                     '''
                 }
