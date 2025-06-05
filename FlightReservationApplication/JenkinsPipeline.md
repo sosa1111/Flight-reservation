@@ -87,6 +87,7 @@ kubectl version --client
 
 # Install AWS ClI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+apt install unzip -y
 unzip awscliv2.zip
 sudo ./aws/install
 aws configure
@@ -243,7 +244,7 @@ The pipeline consists of the following stages:
 - login using `aws configure`
 - update ~/.kube/config to authenticate with cluster
 `aws eks update-kubeconfig --name cbz-cluster-dev --region eu-west-2`
-- copy kubeconfig to jenkins user `cp -rf ~/.kube /var/lib/jenkin/`
+- copy kubeconfig to jenkins user `cp -rf ~/.kube /var/lib/jenkins/`
 - allow jenkins to use kubeconfig `chown jenkins -R /var/lib/jenkins/.kube`
 
 ### Create and update DB cred

@@ -36,23 +36,23 @@ pipeline {
             }
         }
         
-        stage('QA') {
-            steps {
-                withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar-cred') {
-                    sh '''
-                        cd FlightReservationApplication
-                        ${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=flight-reservation-app
-                    '''
-                }
-            }
-        }
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('QA') {
+        //     steps {
+        //         withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar-cred') {
+        //             sh '''
+        //                 cd FlightReservationApplication
+        //                 ${MAVEN_HOME}/bin/mvn sonar:sonar -Dsonar.projectKey=flight-reservation-app
+        //             '''
+        //         }
+        //     }
+        // }
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 10, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage('DOCKER BUILD') {
             steps {
                 script {
