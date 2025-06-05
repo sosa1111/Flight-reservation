@@ -28,7 +28,7 @@ pipeline {
             steps {
                 sh '''
                     cd frontend
-                    npm test
+                    npm run test
                 '''
             }
         }
