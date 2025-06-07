@@ -37,6 +37,7 @@ pipeline {
                     cd FlightReservationApplication
                     docker build . -t shubhamkalsait1/flight-reservation-app:latest
                     docker push shubhamkalsait1/flight-reservation-app:latest
+                    docker rmi `docker image list -aq`
                 '''
             }
         }
@@ -47,6 +48,17 @@ pipeline {
                     kubectl apply -f k8s/
                 '''
             }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
+            cleanWs()
         }
     }
 }

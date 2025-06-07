@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    stages {
+        stage('PULL'){
+            git branch: 'main', url: 'https://github.com/shubhamkalsait/Flight-reservation.git'
+        }
+        stage('BUILD'){
+            sh'''
+                cd frontend
+                npm install
+                npm run build
+            '''
+        }
+        stage('DEPLOY'){
+            sh'''
+            cd frontend
+            aws sync dist/ s3://cbz-frontend-dev-buxxx/ 
+            '''
+        }
+    }
+}
