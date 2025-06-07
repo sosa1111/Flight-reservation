@@ -19,10 +19,20 @@ pipeline {
             steps{
                 sh'''
                 cd frontend
-                aws sync dist/ s3://cbz-frontend-dev-buxxx/ 
-                aws cp 
+                aws s3 sync dist/ s3://cbz-frontend-dev-buxxx/ 
                 '''
             }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
+            cleanWs()
         }
     }
 }
