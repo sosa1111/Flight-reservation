@@ -35,7 +35,6 @@ pipeline {
                 '''
             }
         }
-        /*
         stage('QA') {
             steps {
                 withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar-cred') {
@@ -53,7 +52,6 @@ pipeline {
                 }
             }
         }
-        */
         stage('DOCKER BUILD') {
             steps {
                 script {
