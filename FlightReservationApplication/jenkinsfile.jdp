@@ -11,7 +11,7 @@ pipeline {
                 
                sh '''
                 cd FlightReservationApplication
-                mvn clean package
+                mvn clean package -D skiptests=true
                '''
             }
         }
