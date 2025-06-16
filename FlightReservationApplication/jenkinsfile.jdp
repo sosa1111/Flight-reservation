@@ -3,23 +3,52 @@ pipeline {
     stages {
         stage('PULL') {
             steps{
-                echo "PULL"
+                git branch: 'main', url: 'https://github.com/sosa1111/Flight-reservation.git'
             }
         }
         stage('BUILD') {
             steps{
-               echo "BUILD"
+                
+               sh '''
+                cd FlightReservationApplication
+                mvn clean package
+               '''
             }
         }
-        stage('TEST'){
+        stage('QG-TEST'){
             steps{
-               echo "TEST"
+                
+               withSonarQubeEnv(installationName:'sonarqube',credentialsId: 'sonar-cred') {
+                    sh '''
+                        cd FlightReservationApplication
+                        mvn sonar:sonar -Dsonar.projectKey=flight-reservation-backend
+                    '''
+                }
             }
         }
-        stage('DEPLOY') {
+        stage('QUALITYGATE'){
             steps{
-               echo "DEPLOY"
+                timeout(10) {
+                   waitForQualityGate abortPipeline: true, credentialsId: 'sonar-cred'
+                }               
+            }
+        }
+        stage('DOCKER-BUILD') {
+            steps{           
+               sh '''  
+                     cd FlightReservationApplication             
+                    docker build .-t sosa1111/fr:latest
+                    docker push sosa1111/fr:latest
+                '''
             }
         }        
+        stage('DEPLOY') {
+            steps{
+               sh '''
+                cd FlightReservationApplication
+                    kubectl apply -f k8s/
+                '''
+            }
+        } 
     }    
 }
