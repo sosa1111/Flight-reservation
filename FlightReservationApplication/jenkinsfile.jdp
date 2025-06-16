@@ -36,8 +36,8 @@ pipeline {
         stage('DOCKER-BUILD') {
             steps{           
                sh '''  
-                     cd FlightReservationApplication             
-                    docker build .-t sosa1111/fr:latest
+                    cd FlightReservationApplication             
+                    docker build . -t sosa1111/fr:latest
                     docker push sosa1111/fr:latest
                 '''
             }
