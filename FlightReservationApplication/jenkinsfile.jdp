@@ -39,7 +39,7 @@ pipeline {
                     cd FlightReservationApplication             
                     docker build . -t sosa1111/fr:latest
                     docker push sosa1111/fr:latest
-                    docker rmi sosa1111/fr:latest
+                    docker rmi 'docker image list -aq'
                 '''
             }
         }        
@@ -51,5 +51,16 @@ pipeline {
                 '''
             }
         } 
-    }    
+    }
+    post{
+        success{
+            echo "pipeline completed successfully"
+        }
+        failure{
+            echo "pipeline failed "
+        }
+        always{
+            cleanWS()
+        }
+    }
 }
