@@ -39,7 +39,7 @@ pipeline {
                     cd FlightReservationApplication             
                     docker build . -t sosa1111/fr:latest
                     docker push sosa1111/fr:latest
-                    docker rmi 'docker image list -aq'
+                    docker rmi -f $(docker images -aq)
                 '''
             }
         }        
