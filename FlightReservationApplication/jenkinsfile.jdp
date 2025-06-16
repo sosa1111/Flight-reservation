@@ -60,7 +60,7 @@ pipeline {
             echo "pipeline failed "
         }
         always{
-            cleanWS()
+            cleanWs()
         }
     }
 }
