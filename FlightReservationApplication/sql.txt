@@ -13,7 +13,7 @@ CREATE TABLE User (
 
 CREATE TABLE User_Roles (
     user_id BIGINT NOT NULL,
-    roles VARCHAR(50),
+    role VARCHAR(50),
     PRIMARY KEY (user_id, role),
     FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
 );
